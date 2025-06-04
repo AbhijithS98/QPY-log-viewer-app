@@ -1,6 +1,14 @@
+import { useState } from "react"
 import { convertToIST } from "../utils/time"
+import Pagination from "./Pagination"
 
 const LogTable = ({logs}) => {
+  const [currentPage,setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
+  const startIndex = (currentPage-1) * itemsPerPage;
+  const currentLogs = logs.slice(startIndex, startIndex + itemsPerPage);
+
   return (
     <div>
       <div className="m-4 border-2 overflow-x-auto rounded-md shadow">
@@ -13,7 +21,7 @@ const LogTable = ({logs}) => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log, index) => (
+            {currentLogs.map((log, index) => (
               <tr
                 key={index}
                 className="border-t hover:bg-blue-100 cursor-pointer"
@@ -29,6 +37,13 @@ const LogTable = ({logs}) => {
           </tbody>
         </table>
       </div>
+
+      <Pagination 
+       totalItems={logs.length}
+       itemsPerPage={itemsPerPage}
+       currentPage={currentPage}
+       onPageChange={setCurrentPage}
+      />
     </div>
   )
 }
