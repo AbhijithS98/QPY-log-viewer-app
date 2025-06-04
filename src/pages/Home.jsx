@@ -15,6 +15,11 @@ const Home = () => {
       <h1 className="text-2xl font-semibold mb-4">Log Viewer</h1>
       <FileUploader onParsed={setLogs}/>
     </div>
+    
+    {logs.length > 0 && <div>
+      <span className="ml-6 mr-2 text-md text-blue-500">{logs.length} logs found</span>
+      </div>}
+
     <div>
       <LogTable logs={logs}/>
     </div>

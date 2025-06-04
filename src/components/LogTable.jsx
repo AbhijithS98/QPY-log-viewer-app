@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { convertToIST } from "../utils/time"
-import Pagination from "./Pagination"
+import { isObject } from "../utils/isObject"
+
 
 const LogTable = ({logs}) => {
-  const [currentPage,setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const [limit,setLimit] = useState(20);
 
-  const startIndex = (currentPage-1) * itemsPerPage;
-  const currentLogs = logs.slice(startIndex, startIndex + itemsPerPage);
+  const currentLogs = logs.slice(0, limit);
 
   return (
     <div>
@@ -31,19 +30,21 @@ const LogTable = ({logs}) => {
                 <td className="px-4 py-2 font-medium text-gray-800">
                   {log.tags ? log.tags.join(", ") : "-"}
                 </td>
-                <td className="px-4 py-2">{log.message}</td>
+                <td className="px-4 py-2">{isObject(log.message) ? JSON.stringify(log.message) : log.message}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <Pagination 
-       totalItems={logs.length}
-       itemsPerPage={itemsPerPage}
-       currentPage={currentPage}
-       onPageChange={setCurrentPage}
-      />
+      {logs.length > 0 &&
+      <div className="flex justify-end mb-2 mr-4"> 
+        <span class="text-blue-600 font-semibold cursor-pointer" onClick={()=>setLimit(prev=>prev+20)}>
+          load more <span class="ml-1">&gt;&gt;</span>
+        </span>
+      </div>
+      }
+      
     </div>
   )
 }
