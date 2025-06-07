@@ -50,6 +50,23 @@ const Home = () => {
   };
 
 
+  const handleExport = () => {
+  const logsToExport = filteredLogs; 
+  const blob = new Blob([JSON.stringify(logsToExport, null, 2)], {
+    type: "application/json",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `logs-${new Date().toISOString()}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+  };
+
+
   return (
     <>
     <div className="m-4 flex justify-between">
@@ -59,8 +76,16 @@ const Home = () => {
     
     {logs.length > 0 && <div>
       <span className="m-4 text-md text-blue-500">{filteredLogs.length} logs found</span>
-      <FilterSearch onApply={handleFilterApply}/>
-      </div>}
+      <div className="flex justify-between items-center pr-4">
+        <FilterSearch onApply={handleFilterApply}/>
+        <button
+          onClick={handleExport}
+          className="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded text-md whitespace-nowrap"
+          >
+          Export Logs
+        </button>
+      </div>    
+    </div>}
 
     <div>
       <LogTable logs={filteredLogs}/>

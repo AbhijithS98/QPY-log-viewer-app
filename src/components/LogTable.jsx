@@ -8,9 +8,9 @@ const LogTable = ({logs}) => {
   const [sortOrder, setSortOrder] = useState("desc");
 
   const sortedLogs = [...logs].sort((a, b) => {
-  const timeA = new Date(a.timestamp).getTime();
-  const timeB = new Date(b.timestamp).getTime();
-  return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
+    const timeA = new Date(a.timestamp).getTime();
+    const timeB = new Date(b.timestamp).getTime();
+    return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
   });
 
   const currentLogs = sortedLogs.slice(0, limit);
@@ -71,8 +71,7 @@ const LogTable = ({logs}) => {
           </button>
         </div>
       )}
- 
-      
+       
     </div>
   )
 }

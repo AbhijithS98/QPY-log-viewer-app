@@ -11,8 +11,7 @@ const Navbar = () => {
         <div className="space-x-4 hidden sm:flex">
           <Link to="/" className="hover:text-indigo-300 transition-colors">
             Home
-          </Link>
-          
+          </Link>         
         </div>
       </div>
     </nav>

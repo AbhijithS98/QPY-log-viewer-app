@@ -34,7 +34,7 @@ const FilterSearch = ({ onApply }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 m-4 w-full flex-wrap">
+    <div className="flex flex-col sm:flex-row items-start gap-4 m-4 w-full flex-wrap">
       <div className="flex items-center gap-1">
         <label className="text-md font-medium">Search & Filter:</label>
         <input
