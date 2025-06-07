@@ -1,17 +1,19 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { convertToIST } from "../utils/time"
 import { isObject } from "../utils/isObject"
 
 
 const LogTable = ({logs}) => {
   const [limit,setLimit] = useState(20);
+  const [sortOrder, setSortOrder] = useState("desc");
 
-  const currentLogs = logs.slice(0, limit);
+  const sortedLogs = [...logs].sort((a, b) => {
+  const timeA = new Date(a.timestamp).getTime();
+  const timeB = new Date(b.timestamp).getTime();
+  return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
+  });
 
-  useEffect(()=>{
-    console.log('limit:',limit);
-    
-  },[limit]);
+  const currentLogs = sortedLogs.slice(0, limit);
 
   return (
     <div>
@@ -19,7 +21,11 @@ const LogTable = ({logs}) => {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-300 text-gray-700 font-semibold">
             <tr>
-              <th className="px-4 py-3">Date (IST)</th>
+              <th className="px-4 py-3 cursor-pointer select-none"
+                  onClick={() => setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))}
+              >
+                Date (IST) {sortOrder === "asc" ? "▲" : "▼"}
+              </th>
               <th className="px-4 py-3">Level</th>
               <th className="px-4 py-3">Tags</th>
               <th className="px-4 py-3">Message</th>
@@ -51,14 +57,6 @@ const LogTable = ({logs}) => {
           </tbody>
         </table>
       </div>
-
-      {/* {logs.length > 0 &&
-      <div className="flex justify-end mb-2 mr-4"> 
-        <span className="text-blue-600 font-semibold cursor-pointer" onClick={()=>setLimit(prev=>prev+20)}>
-          load more <span className="ml-1">&gt;&gt;</span>
-        </span>
-      </div>
-      } */}
 
       {logs.length > 0 && (
         <div className="flex justify-end mb-2 mr-4">
