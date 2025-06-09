@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { convertToIST } from "../utils/time"
 import { isObject } from "../utils/isObject"
+import LogDetailsModal from "./LogDetailsModal"
 
 
 const LogTable = ({logs}) => {
   const [limit,setLimit] = useState(20);
   const [sortOrder, setSortOrder] = useState("desc");
+  const [selectedLog,setSelectedLog] = useState(null);
 
   const sortedLogs = [...logs].sort((a, b) => {
     const timeA = new Date(a.timestamp).getTime();
@@ -17,6 +19,7 @@ const LogTable = ({logs}) => {
 
   return (
     <div>
+      <LogDetailsModal log={selectedLog} onClose={()=>setSelectedLog(null)}/>
       <div className="m-4 border-2 overflow-x-auto rounded-md shadow">
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-300 text-gray-700 font-semibold">
@@ -34,7 +37,7 @@ const LogTable = ({logs}) => {
           <tbody>
             {!currentLogs.length ? (
                <tr>
-                 <td colSpan="4" className="text-center py-6 text-red-600 text-xl">
+                 <td colSpan={4} className="text-center py-6 text-red-600 text-xl">
                    No logs found..!
                  </td>
                </tr>
@@ -43,7 +46,7 @@ const LogTable = ({logs}) => {
               <tr
                 key={index}
                 className="border-t hover:bg-blue-100 cursor-pointer"
-                
+                onClick={() => setSelectedLog(log)}
               >
                 <td className="px-4 py-2 whitespace-nowrap text-sm">{convertToIST(log.timestamp)}</td>
                 <td className="px-4 py-2">{log.level}</td>
@@ -57,6 +60,13 @@ const LogTable = ({logs}) => {
           </tbody>
         </table>
       </div>
+
+      {selectedLog && (
+        <LogDetailsModal
+          log={selectedLog}
+          onClose={() => setSelectedLog(null)}
+        />
+      )}
 
       {logs.length > 0 && (
         <div className="flex justify-end mb-2 mr-4">

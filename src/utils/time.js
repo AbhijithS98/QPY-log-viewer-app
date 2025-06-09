@@ -1,7 +1,3 @@
-// export function convertToIST(utcTime) {
-//   const date = new Date(utcTime);
-//   return date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
-// }
 
 export function convertToIST(utcTime) {
   const date = new Date(utcTime);
