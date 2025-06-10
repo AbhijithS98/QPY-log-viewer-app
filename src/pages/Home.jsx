@@ -16,7 +16,7 @@ const Home = () => {
   setFilteredLogs(data);
   };
 
-  const handleFilterApply = ({ tags, level, logic, searchText }) => {
+  const handleFilterApply = ({ tags, exTags, level, logic, searchText }) => {
   if (!tags && !level && !searchText) return setFilteredLogs(logs);
 
   const filtered = logs.filter((log) => {
@@ -33,7 +33,8 @@ const Home = () => {
       tagMatch =
         logic === "OR"
           ? tags.some((t) => logTags.includes(t))
-          : tags.every((t) => logTags.includes(t));
+          : tags.every((t) => logTags.includes(t)) 
+          && exTags.every((t) => !logTags.includes(t));
     }
 
     // Level filtering

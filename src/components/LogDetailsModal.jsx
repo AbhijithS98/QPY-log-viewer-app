@@ -1,8 +1,21 @@
+import { useState } from "react";
 import { convertToIST } from "../utils/time";
 import { isObject } from "../utils/isObject";
 
 const LogDetailsModal = ({ log, onClose}) => {
   if(!log) return null;
+
+  const [openTagMenu, setOpenTagMenu] = useState(null);
+
+  const handleTagClick = (idx) => {
+    setOpenTagMenu(openTagMenu === idx ? null : idx);
+  };
+
+  const handleOptionClick = (option, tag) => {
+    // Handle your option logic here
+    alert(`Option "${option}" clicked for tag "${tag}"`);
+    setOpenTagMenu(null);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-opacity-30">
@@ -37,7 +50,41 @@ const LogDetailsModal = ({ log, onClose}) => {
           </div>
           <div>
             <span className="font-bold text-blue-600">Tags : </span>
-            <span className="text-gray-800 font-mono">{log.tags?.join(", ") || "-"}</span>
+            {log.tags?.map((tag, idx) => (
+              <span key={idx} className="relative inline-block">
+                <button 
+                  key={idx} 
+                  className="mx-1 px-2 py-1 bg-blue-100 hover:bg-blue-300 text-gray-800 font-mono rounded cursor-pointer"
+                  onClick={() => handleTagClick(idx)}
+                >
+                  {tag}
+                </button>
+
+                {openTagMenu === idx && (
+                  <div className="absolute right-0 mt-1 bg-white border rounded shadow-lg z-10 w-max">
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-blue-100"
+                      onClick={() => handleOptionClick("filterBy", tag)}
+                    >
+                      Filter by <strong className="text-gray-800 font-mono">{tag}</strong>
+                    </button>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-blue-100"
+                      onClick={() => handleOptionClick("exclude", tag)}
+                    >
+                      Exclude <strong className="text-gray-800 font-mono">{tag}</strong>
+                    </button>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-blue-100"
+                      onClick={() => handleOptionClick("replace", tag)}
+                    >
+                      Replace filter with <strong className="text-gray-800 font-mono">{tag}</strong>
+                    </button>
+                  </div>
+                )}
+              </span>              
+            ))}
+
           </div>
           <div>
             <span className="font-bold text-blue-600">Timestamp : </span>
