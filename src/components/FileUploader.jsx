@@ -31,7 +31,7 @@ const FileUploader = ({ onParsed }) => {
       </label>
       <input
         type="file"
-        accept=".log,.txt"
+        accept=".log,.txt,.json"
         onChange={handleFileUpload}
         className="w-full sm:w-auto px-4 py-2 border border-gray-400 rounded-md shadow-sm text-sm focus:outline-none focus:ring focus:ring-indigo-500"
       />

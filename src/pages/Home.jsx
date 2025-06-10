@@ -52,15 +52,18 @@ const Home = () => {
 
   const handleExport = () => {
   const logsToExport = filteredLogs; 
-  const blob = new Blob([JSON.stringify(logsToExport, null, 2)], {
-    type: "application/json",
+
+  const logText = logsToExport.map(log => JSON.stringify(log)).join("\n");
+
+  const blob = new Blob([logText], {
+    type: "text/plain",
   });
 
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `logs-${new Date().toISOString()}.json`;
+  a.download = `logs-${new Date().toISOString()}.log`;
   a.click();
 
   URL.revokeObjectURL(url);
