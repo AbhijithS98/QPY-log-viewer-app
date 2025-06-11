@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useQuery } from "../context/QueryContext";
 
 const FilterSearch = ({ onApply }) => {
   const TRIGGER_SUGGESTIONS = ['@tags:', '-@tags:', '@level:'];
@@ -6,7 +7,7 @@ const FilterSearch = ({ onApply }) => {
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
-  const [query, setQuery] = useState("");
+  const { query, setQuery } = useQuery();
 
   const updateSuggestions = (value) => {
     if (value.endsWith("@level:")) {

@@ -17,7 +17,7 @@ const Home = () => {
   };
 
   const handleFilterApply = ({ tags, exTags, level, logic, searchText }) => {
-  if (!tags && !level && !searchText) return setFilteredLogs(logs);
+  if (!tags && !level && !searchText && !exTags) return setFilteredLogs(logs);
 
   const filtered = logs.filter((log) => {
     const logTags = (log.tags || []).map((t) => t.toLowerCase());
@@ -29,14 +29,15 @@ const Home = () => {
 
     // Tag filtering
     let tagMatch = true;
-    if (tags.length) {
-      tagMatch =
-        logic === "OR"
-          ? tags.some((t) => logTags.includes(t))
-          : tags.every((t) => logTags.includes(t)) 
-          && exTags.every((t) => !logTags.includes(t));
-    }
-
+    tagMatch =
+      logic === "OR"
+        ? tags?.some((t) => logTags.includes(t))
+        : tags?.every((t) => logTags.includes(t)) 
+    
+    // ExTag filtering
+    let exTagMatch = true;
+    if(exTags) exTagMatch = exTags.every((t) => !logTags.includes(t));    
+    
     // Level filtering
     let levelMatch = true;
     if (level) levelMatch = logLevel === level;
@@ -44,7 +45,7 @@ const Home = () => {
     // Message search
     const searchMatch = searchText ? msg.includes(searchText) : true;
 
-    return tagMatch && levelMatch && searchMatch;
+    return tagMatch && levelMatch && searchMatch && exTagMatch;
   });
 
   setFilteredLogs(filtered);

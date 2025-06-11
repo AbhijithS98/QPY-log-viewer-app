@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { convertToIST } from "../utils/time";
 import { isObject } from "../utils/isObject";
+import { useQuery } from "../context/QueryContext";
 
 const LogDetailsModal = ({ log, onClose}) => {
   if(!log) return null;
 
+  const { setQuery } = useQuery();
   const [openTagMenu, setOpenTagMenu] = useState(null);
 
   const handleTagClick = (idx) => {
@@ -13,7 +15,13 @@ const LogDetailsModal = ({ log, onClose}) => {
 
   const handleOptionClick = (option, tag) => {
     // Handle your option logic here
-    alert(`Option "${option}" clicked for tag "${tag}"`);
+    if (option === "filterBy") {
+      setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `@tags:${tag}`);
+    } else if (option === "exclude") {
+      setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `-@tags:${tag}`);
+    } else if (option === "replace") {
+      setQuery(`@tags:${tag}`);
+    }
     setOpenTagMenu(null);
   };
 
