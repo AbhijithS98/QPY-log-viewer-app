@@ -27,7 +27,11 @@ const LogDetailsModal = ({ log, onClose}) => {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-opacity-30">
-      <div className="bg-gray-100 w-full sm:w-3/4 h-full overflow-y-auto shadow-2xl relative p-6 rounded-l-xl">
+      <div className={` bg-gray-100 w-full sm:w-3/4 h-full overflow-y-auto shadow-2xl relative p-6 rounded-l-xl border-t-8
+            ${log.level === 'info' ? 'border-t-blue-500' : ''}
+            ${log.level === 'error' ? 'border-t-red-500' : ''}
+            ${log.level === 'warn' ? 'border-t-orange-400' : ''}`}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}

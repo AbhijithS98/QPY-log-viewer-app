@@ -80,7 +80,7 @@ const Home = () => {
     </div>
     
     {logs.length > 0 && <div>
-      <span className="m-4 text-md text-blue-500">{filteredLogs.length} logs found</span>
+      <span className="m-4 font-bold text-blue-500">{filteredLogs.length} logs found</span>
       <div className="flex justify-between items-center pr-4">
         <FilterSearch onApply={handleFilterApply}/>
         <button

@@ -81,14 +81,14 @@ const FilterSearch = ({ onApply }) => {
 
   return (
     <div className="flex flex-col sm:flex-row items-start gap-4 m-4 w-full flex-wrap">
-      <div className="relative flex items-center gap-1">
-        <label className="text-md font-medium">Search & Filter:</label>
+      <div className="relative flex items-center">
+        <button className="text-md font-normal bg-gray-100 border rounded-bl rounded-tl px-2 py-1">Search & Filter</button>
         <input
         type="text"
         value={query}
         onChange={handleInputChange}
         placeholder='e.g. @level:info @tags:fyers AND/OR @tags:zerodha "Search Text"'
-        className="px-3 py-2 border rounded w-full sm:w-[32rem] text-sm"
+        className="px-3 py-1.5 border rounded-tr rounded-br w-full sm:w-[32rem] text-sm"
         />
 
         {showSuggestions && (
@@ -96,7 +96,7 @@ const FilterSearch = ({ onApply }) => {
             {suggestions.map(s => (
               <div
                 key={s}
-                className="px-3 py-1 hover:bg-blue-100 cursor-pointer"
+                className="px-3 py-1 hover:bg-blue-200 cursor-pointer"
                 onClick={() => handleSuggestionClick(s)}
               >
                 {s}

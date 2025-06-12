@@ -27,11 +27,11 @@ const LogTable = ({logs}) => {
               <th className="px-4 py-3 cursor-pointer select-none"
                   onClick={() => setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))}
               >
-                Date (IST) {sortOrder === "asc" ? "▲" : "▼"}
+                DATE {sortOrder === "asc" ? "▲" : "▼"}
               </th>
-              <th className="px-4 py-3">Level</th>
-              <th className="px-4 py-3">Tags</th>
-              <th className="px-4 py-3">Message</th>
+              
+              <th className="px-4 py-3">TAGS</th>
+              <th className="px-4 py-3">MESSAGE</th>
             </tr>
           </thead>
           <tbody>
@@ -48,8 +48,21 @@ const LogTable = ({logs}) => {
                 className="border-t hover:bg-blue-100 cursor-pointer"
                 onClick={() => setSelectedLog(log)}
               >
-                <td className="px-4 py-2 whitespace-nowrap text-sm">{convertToIST(log.timestamp)}</td>
-                <td className="px-4 py-2">{log.level}</td>
+                <td className="px-2 py-2 whitespace-nowrap text-sm">
+                  <div className="flex items-center">
+                    <span
+                      className={`
+                        inline-block w-1.5 h-5 mr-2 rounded
+                        ${log.level === 'error' ? 'bg-red-500' : ''}
+                        ${log.level === 'warn' ? 'bg-orange-400' : ''}
+                        ${log.level === 'info' ? 'bg-blue-500' : ''}
+                      `}
+                      aria-hidden="true"
+                    />
+                    {convertToIST(log.timestamp)}
+                  </div>
+                </td>
+                
                 <td className="px-4 py-2 font-medium text-gray-800">
                   {log.tags ? log.tags.join(", ") : "-"}
                 </td>
