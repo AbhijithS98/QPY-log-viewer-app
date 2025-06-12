@@ -1,6 +1,6 @@
 import React from "react";
 
-const FileUploader = ({ onParsed }) => {
+const FileUploader = ({ onParsed, setLimit }) => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -19,6 +19,7 @@ const FileUploader = ({ onParsed }) => {
       }).filter(Boolean);
 
       onParsed(parsed);
+      setLimit(20);
     };
 
     reader.readAsText(file);

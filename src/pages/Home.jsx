@@ -4,6 +4,7 @@ import LogTable from "../components/LogTable";
 import FilterSearch from "../components/FilterSearch";
 
 const Home = () => {
+  const [limit,setLimit] = useState(20);
   const [logs, setLogs] = useState([]);
   const [filteredLogs, setFilteredLogs] = useState([]);
   
@@ -76,7 +77,7 @@ const Home = () => {
     <>
     <div className="m-4 flex justify-between">
       <h1 className="text-2xl font-semibold">Parsed Log File Entries</h1>
-      <FileUploader onParsed={handleParsedLogs}/>
+      <FileUploader onParsed={handleParsedLogs} setLimit={setLimit}/>
     </div>
     
     {logs.length > 0 && <div>
@@ -93,7 +94,7 @@ const Home = () => {
     </div>}
 
     <div>
-      <LogTable logs={filteredLogs}/>
+      <LogTable logs={filteredLogs} limit={limit} setLimit={setLimit}/>
     </div>
     </>
   )

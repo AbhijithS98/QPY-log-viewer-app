@@ -4,8 +4,7 @@ import { isObject } from "../utils/isObject"
 import LogDetailsModal from "./LogDetailsModal"
 
 
-const LogTable = ({logs}) => {
-  const [limit,setLimit] = useState(20);
+const LogTable = ({logs, limit, setLimit}) => {
   const [sortOrder, setSortOrder] = useState("desc");
   const [selectedLog,setSelectedLog] = useState(null);
 
