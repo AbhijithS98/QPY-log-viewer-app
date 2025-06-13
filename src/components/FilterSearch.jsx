@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useQuery } from "../context/QueryContext";
 
 const FilterSearch = ({ onApply }) => {
-  const TRIGGER_SUGGESTIONS = ['@tags:', '-@tags:', '@level:'];
+  const TRIGGER_SUGGESTIONS = ['@tags:', '-@tags:', '@level:', '-@level:'];
   const LEVEL_SUGGESTIONS = ['info', 'error', 'warn'];
 
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -38,6 +38,8 @@ const FilterSearch = ({ onApply }) => {
       newQuery = query.replace(/@$/, suggestion);
     } else if (query.endsWith('@level:')) {
       newQuery = query.replace(/@level:$/, `@level:${suggestion} `);
+    } else if (query.endsWith('-@level:')) {
+      newQuery = query.replace(/-@level:$/, `-@level:${suggestion} `);
     } else {
       newQuery = query + suggestion + ' ';
     }
@@ -52,6 +54,7 @@ const FilterSearch = ({ onApply }) => {
     const tags = [];
     const exTags = [];
     let level = null;
+    let exLevel = null;
     let logic = "AND";
     let searchText = "";
 
@@ -61,6 +64,7 @@ const FilterSearch = ({ onApply }) => {
       else if (token.startsWith("@tags:")) tags.push(token.slice(6).toLowerCase());
       else if (token.startsWith("-@tags:")) exTags.push(token.slice(7).toLowerCase());
       else if (token.startsWith("@level:")) level = token.slice(7).toLowerCase();
+      else if (token.startsWith("-@level:")) exLevel = token.slice(8).toLowerCase();
       else searchText += token + " ";
     });
 
@@ -68,6 +72,7 @@ const FilterSearch = ({ onApply }) => {
       tags,
       exTags,
       level,
+      exLevel,
       logic,
       searchText: searchText.trim().toLowerCase(),
     });
