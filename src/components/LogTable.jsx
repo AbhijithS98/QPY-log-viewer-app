@@ -17,8 +17,7 @@ const LogTable = ({logs, limit, setLimit}) => {
   const currentLogs = sortedLogs.slice(0, limit);
 
   return (
-    <div>
-      <LogDetailsModal log={selectedLog} onClose={()=>setSelectedLog(null)}/>
+    <div>     
       <div className="m-4 border-2 overflow-x-auto rounded-md shadow">
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-300 text-gray-700 font-semibold">

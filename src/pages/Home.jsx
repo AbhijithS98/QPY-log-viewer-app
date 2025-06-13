@@ -13,8 +13,8 @@ const Home = () => {
   }, [logs]);
 
   const handleParsedLogs = (data) => {
-  setLogs(data);
-  setFilteredLogs(data);
+    setLogs(data);
+    setFilteredLogs(data);
   };
 
   const handleFilterApply = ({ tags, exTags, level, exLevel, logic, searchText }) => {
@@ -57,22 +57,15 @@ const Home = () => {
 
 
   const handleExport = () => {
-  const logsToExport = filteredLogs; 
-
-  const logText = logsToExport.map(log => JSON.stringify(log)).join("\n");
-
-  const blob = new Blob([logText], {
-    type: "text/plain",
-  });
-
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `logs-${new Date().toISOString()}.log`;
-  a.click();
-
-  URL.revokeObjectURL(url);
+    const logsToExport = filteredLogs; 
+    const logText = logsToExport.map(log => JSON.stringify(log)).join("\n");
+    const blob = new Blob([logText], { type: "text/plain", });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `logs-${new Date().toISOString()}.log`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
 

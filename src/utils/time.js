@@ -1,4 +1,3 @@
-
 export function convertToIST(utcTime) {
   const date = new Date(utcTime);
   const options = {

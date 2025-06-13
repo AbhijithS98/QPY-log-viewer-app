@@ -1,5 +1,3 @@
-import React from "react";
-
 const FileUploader = ({ onParsed, setLimit }) => {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];

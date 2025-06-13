@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { convertToIST } from "../utils/time";
 import { isObject } from "../utils/isObject";
 import { useQuery } from "../context/QueryContext";
+import { highlightMatches } from "../utils/highlightMatches";
+import { FiSearch } from "react-icons/fi";
 
 const LogDetailsModal = ({ log, onClose}) => {
   if(!log) return null;
 
   const { setQuery } = useQuery();
   const [openTagMenu, setOpenTagMenu] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const inputRef = useRef(null);
 
   const handleTagClick = (idx) => {
     setOpenTagMenu(openTagMenu === idx ? null : idx);
   };
 
   const handleOptionClick = (option, tag) => {
-    // Handle your option logic here
     if (option === "filterBy") {
       setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `@tags:${tag}`);
     } else if (option === "exclude") {
@@ -24,6 +28,18 @@ const LogDetailsModal = ({ log, onClose}) => {
     }
     setOpenTagMenu(null);
   };
+
+  
+  const messageString = isObject(log.message)
+    ? JSON.stringify(log.message, null, 2)
+    : String(log.message);
+
+  // Focus input when shown
+  useEffect(() => {
+    if (showSearch && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [showSearch]);
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-opacity-30">
@@ -58,6 +74,7 @@ const LogDetailsModal = ({ log, onClose}) => {
 
         {/* Details */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-12 text-base">
+
           <div>
             <span className="font-bold text-blue-600">Instance : </span>
             <span className="text-gray-800 font-mono">{log.instance || "-"}</span>
@@ -70,6 +87,7 @@ const LogDetailsModal = ({ log, onClose}) => {
             <span className="font-bold text-blue-600">Timestamp : </span>
             <span className="text-gray-800 font-mono">{convertToIST(log.timestamp)}</span>
           </div>
+
           <div>
             <span className="font-bold text-blue-600">Tags : </span>
             {log.tags?.map((tag, idx) => (
@@ -106,17 +124,55 @@ const LogDetailsModal = ({ log, onClose}) => {
                 )}
               </span>              
             ))}
-
           </div>
+
+          {log.func && <div>
+            <span className="font-bold text-blue-600">func : </span>
+            <span className="text-gray-800 font-mono">{log.func || "-"}</span>
+          </div>}
+          {log.errorFunc && <div>
+            <span className="font-bold text-blue-600">errorFunc : </span>
+            <span className="text-gray-800 font-mono">{log.errorFunc || "-"}</span>
+          </div>}
+          {log.module && <div>
+            <span className="font-bold text-blue-600">module : </span>
+            <span className="text-gray-800 font-mono">{log.module || "-"}</span>
+          </div>}
+
           
           <div className="sm:col-span-2">
             <span className="block font-bold text-blue-600 mb-1">Message :</span>
-            <pre className="bg-gray-50 border border-gray-200 text-blue-900 p-4 rounded whitespace-pre-wrap break-words">
-              {isObject(log.message)
-                ? JSON.stringify(log.message, null, 2)
-                : log.message}
-            </pre>
+            <div className="relative">
+              <pre className="bg-gray-50 border border-gray-200 text-blue-900 p-4 rounded whitespace-pre-wrap break-words">
+                {/* Search icon/input in top-right */}
+                <div className="absolute top-2 right-2">
+                  {!showSearch ? (
+                    <button
+                      onClick={() => setShowSearch(true)}
+                      className="p-1 rounded hover:bg-gray-200"
+                      aria-label="Search in message"
+                    >
+                      <FiSearch size={18} />
+                    </button>
+                  ) : (
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={search}
+                      onChange={e => setSearch(e.target.value)}
+                      onBlur={() => setShowSearch(false)}
+                      placeholder="Search..."
+                      className="border px-2 py-1 rounded text-sm"
+                      style={{ minWidth: 80 }}
+                    />
+                  )}
+                </div>
+
+                {highlightMatches(messageString, search)}
+              </pre>
+            </div>          
           </div>
+
         </div>
       </div>
     </div>

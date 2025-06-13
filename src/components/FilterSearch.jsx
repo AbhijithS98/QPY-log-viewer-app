@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react"
 import { useQuery } from "../context/QueryContext";
+import { TRIGGER_SUGGESTIONS, LEVEL_SUGGESTIONS } from "../utils/constants";
 
 const FilterSearch = ({ onApply }) => {
-  const TRIGGER_SUGGESTIONS = ['@tags:', '-@tags:', '@level:', '-@level:'];
-  const LEVEL_SUGGESTIONS = ['info', 'error', 'warn'];
-
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const { query, setQuery } = useQuery();
