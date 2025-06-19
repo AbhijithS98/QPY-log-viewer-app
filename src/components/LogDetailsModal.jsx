@@ -10,6 +10,7 @@ const LogDetailsModal = ({ log, onClose}) => {
 
   const { setQuery } = useQuery();
   const [openTagMenu, setOpenTagMenu] = useState(null);
+  const [openLevelMenu, setOpenLevelMenu] = useState(null);
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
   const inputRef = useRef(null);
@@ -18,7 +19,11 @@ const LogDetailsModal = ({ log, onClose}) => {
     setOpenTagMenu(openTagMenu === idx ? null : idx);
   };
 
-  const handleOptionClick = (option, tag) => {
+  const handleLevelClick = (level) => {
+    setOpenLevelMenu(openLevelMenu === level ? null : level);
+  };
+
+  const handleTagOptionClick = (option, tag) => {
     if (option === "filterBy") {
       setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `@tags:${tag}`);
     } else if (option === "exclude") {
@@ -27,6 +32,15 @@ const LogDetailsModal = ({ log, onClose}) => {
       setQuery(`@tags:${tag}`);
     }
     setOpenTagMenu(null);
+  };
+
+  const handleLevelOptionClick = (option, level) => {
+    if (option === "filterBy") {
+      setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `@level:${level}`);
+    } else if (option === "exclude") {
+      setQuery(prev => prev.trim() + (prev.trim() ? " " : "") + `-@level:${level}`);
+    } 
+    setOpenLevelMenu(null);
   };
 
   
@@ -104,19 +118,19 @@ const LogDetailsModal = ({ log, onClose}) => {
                   <div className="absolute right-0 mt-1 bg-white border rounded shadow-lg z-10 w-max">
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-blue-100"
-                      onClick={() => handleOptionClick("filterBy", tag)}
+                      onClick={() => handleTagOptionClick("filterBy", tag)}
                     >
                       Filter by <strong className="text-gray-800 font-mono">{tag}</strong>
                     </button>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-blue-100"
-                      onClick={() => handleOptionClick("exclude", tag)}
+                      onClick={() => handleTagOptionClick("exclude", tag)}
                     >
                       Exclude <strong className="text-gray-800 font-mono">{tag}</strong>
                     </button>
                     <button
                       className="block w-full px-4 py-2 text-left hover:bg-blue-100"
-                      onClick={() => handleOptionClick("replace", tag)}
+                      onClick={() => handleTagOptionClick("replace", tag)}
                     >
                       Replace filter with <strong className="text-gray-800 font-mono">{tag}</strong>
                     </button>
@@ -124,6 +138,34 @@ const LogDetailsModal = ({ log, onClose}) => {
                 )}
               </span>              
             ))}
+          </div>
+
+          <div>
+            <span className="font-bold text-blue-600">Level : </span>
+              <span className="relative inline-block">
+                <button                    
+                  className="mx-1 px-2 py-1 bg-blue-100 hover:bg-blue-300 text-gray-800 font-mono rounded cursor-pointer"
+                  onClick={() => handleLevelClick(log.level)}
+                >
+                  {log.level}
+                </button>
+                {openLevelMenu === log.level && (
+                  <div className="absolute left-0 mt-1 bg-white border rounded shadow-lg z-10 w-max">
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-blue-100"
+                      onClick={() => handleLevelOptionClick("filterBy", log.level)}
+                    >
+                      Filter by <strong className="text-gray-800 font-mono">{log.level}</strong>
+                    </button>
+                    <button
+                      className="block w-full px-4 py-2 text-left hover:bg-blue-100"
+                      onClick={() => handleLevelOptionClick("exclude", log.level)}
+                    >
+                      Exclude <strong className="text-gray-800 font-mono">{log.level}</strong>
+                    </button>       
+                  </div>
+                )}
+                </span>
           </div>
 
           {log.func && <div>
