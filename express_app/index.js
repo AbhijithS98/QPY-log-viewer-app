@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const { S3Client, ListObjectsV2Command } = require('@aws-sdk/client-s3');
-require("dotenv").config();
+const dotenv = require('dotenv');
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
@@ -38,7 +40,8 @@ app.get('/api/list', async (req,res) => {
  
   try {
     const data = await bucketClient.send(command);
-
+    console.log("response:", data);
+    
     const folders = data.CommonPrefixes?.map((p) => p.Prefix.replace(fullPrefix, "")) || [];
     const files = data.Contents
       ?.map((obj) => obj.Key.replace(fullPrefix, ""))
@@ -57,5 +60,5 @@ app.get('/',(req,res)=>{
 })
 
 app.listen(PORT||5000, () => {
-  console.log(`🚀 Express API running on http://localhost:${PORT}`);
+  console.log(`Express API running on http://localhost:${PORT}`);
 });

@@ -1,0 +1,16 @@
+{
+  "name": "log-viewer-app",
+  "version": "1.0.0",
+  "description": "INSTRUCTIONS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run dev --prefix express_app\" \"npm run dev --prefix react_app\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}

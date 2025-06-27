@@ -1,17 +1,19 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '.env') });
 const fs = require("fs"); 
-const path = require("path"); 
 const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');  
 const os = require("os"); 
 
-const requiredEnv = ['BUCKET_HOST','BUCKET_NAME','BUCKET_REGION','BUCKET_ACCESS_KEY','BUCKET_SECRET_KEY'];
+const requiredEnv = ['BUCKET_HOST','BUCKET_NAME','BUCKET_REGION','BUCKET_ACCESS_KEY','BUCKET_SECRET_KEY','BUCKET_ROOT'];
 for (const key of requiredEnv) {
   if (!process.env[key]) {
     throw new Error(`Missing required environment variable: ${key}`);
   }
 }
 
-const { BUCKET_HOST,   
+const { BUCKET_HOST,
+        BUCKET_ROOT, 
         BUCKET_NAME,
         BUCKET_REGION,
         BUCKET_ACCESS_KEY, 
@@ -43,9 +45,8 @@ async function uploadDirectoryToS3(sourceDirs) {
       }
       const filePath = path.join(dir, file);
       if (fs.lstatSync(filePath).isFile()) {
-        const appName = path.basename(dir);
         const fileStream = fs.createReadStream(filePath);
-        const s3Key = `log_archives/${today}/${serverName}/${appName}_${file}`;
+        const s3Key = `${BUCKET_ROOT}/${today}/${serverName}/${file}`;
         const putParams = {
           Bucket: BUCKET_NAME,
           Key: s3Key,
@@ -55,6 +56,8 @@ async function uploadDirectoryToS3(sourceDirs) {
         try{
           await bucketClient.send(new PutObjectCommand(putParams));
           console.log(`Uploaded: ${s3Key}`);
+          fs.unlinkSync(filePath);
+          console.log(`Deleted local file: ${filePath}`);
         } catch (err){
           console.error(`Failed to upload ${s3Key}:`, err);
         }    
