@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { S3Client, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+const { S3Client, ListObjectsV2Command, GetObjectCommand } = require('@aws-sdk/client-s3');
 const dotenv = require('dotenv');
 const path = require('path');
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -28,6 +28,7 @@ const bucketClient = new S3Client({
   region: BUCKET_REGION,
 });
 
+//List Folders & Files
 app.get('/api/list', async (req,res) => { 
   const prefix = req.query.prefix || ""; 
   const fullPrefix = BUCKET_ROOT + prefix;
@@ -54,6 +55,38 @@ app.get('/api/list', async (req,res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+//Get file content
+app.get("/api/file", async (req, res) => {
+  const key = BUCKET_ROOT + req.query.key;
+
+  const command = new GetObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+  });
+
+  try {
+    const data = await bucketClient.send(command);
+      
+    //Converting stream to string
+    const streamToString = (stream) =>
+      new Promise((resolve, reject) => {
+        const chunks = [];
+        stream.on("data", (chunk) => chunks.push(chunk));
+        stream.on("error", reject);
+        stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+      });
+
+    const fileContents = await streamToString(data.Body);
+    res.send(fileContents); 
+
+  } catch (err) {
+    console.error("Error fetching file:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 app.get('/',(req,res)=>{
   res.send("express server is UP")

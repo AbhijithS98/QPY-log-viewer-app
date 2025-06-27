@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 
-const FolderBrowser = () => {
+const FolderBrowser = ({ onFileSelect }) => {
   const [path,setPath] = useState([]);
   const [folders,setFolders] = useState([]);
   const [files,setFiles] = useState([]);
@@ -27,10 +27,23 @@ const FolderBrowser = () => {
           {folders.map((folder) => (
             <div
               key={folder}
-              className="cursor-pointer text-blue-500 hover:underline"
+              className="cursor-pointer text-blue-500 text-2xl hover:underline"
               onClick={() => handleFolderClick(folder)}
             >
-              {folder}
+              {folder.slice(0,folder.length-1)}
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h3 className="font-semibold">📄 Files</h3>
+          {files.map((file) => (
+            <div
+              key={file}
+              className="cursor-pointer text-green-600 hover:underline"
+              onClick={() => onFileSelect(prefix + file)}
+            >
+              {file}
             </div>
           ))}
         </div>
