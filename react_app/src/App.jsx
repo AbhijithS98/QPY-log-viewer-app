@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import { QueryProvider } from "./context/QueryContext";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Home from './pages/Home'
+import { QueryProvider } from './context/QueryContext'
 
 const App = () => {
   return (
@@ -9,11 +9,11 @@ const App = () => {
       <QueryProvider>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />}/>
+          <Route path="/" element={<Home />} />
         </Routes>
-      </QueryProvider>     
+      </QueryProvider>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App
