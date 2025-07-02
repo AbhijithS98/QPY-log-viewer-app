@@ -50,7 +50,7 @@ app.get('/api/list', async (req, res) => {
         (name) => name && !name.endsWith('/'),
       ) || []
 
-    res.json({ folders, files })
+    res.json({ folders, files, prefix: fullPrefix })
   } catch (err) {
     console.error('Error listing objects:', err)
     res.status(500).json({ error: err.message })

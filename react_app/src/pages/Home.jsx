@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import FolderBrowser from '../components/FolderBrowser'
 import LogTable from '../components/LogTable'
 import FilterSearch from '../components/FilterSearch'
+import Breadcrumbs from '../components/BreadCrumbs'
 import { filterLogs, exportLogs } from '../utils/logUtils'
 import { FiFolder, FiArrowLeft, FiFileText } from 'react-icons/fi'
 
@@ -10,6 +11,7 @@ const Home = () => {
   const [logs, setLogs] = useState([])
   const [filteredLogs, setFilteredLogs] = useState([])
   const [showBrowser, setShowBrowser] = useState(true)
+  const [currentPath, setCurrentPath] = useState([]);
 
   useEffect(() => {
     // For debugging
@@ -35,6 +37,7 @@ const Home = () => {
     setFilteredLogs(logsData)
     setLimit(20)
     setShowBrowser(false)
+    setCurrentPath(pathArr);
   }
 
   const handleBackToBrowser = () => {
@@ -42,6 +45,7 @@ const Home = () => {
     setLogs([])
     setFilteredLogs([])
     setLimit(20)
+    setCurrentPath((prevPath)=>prevPath.slice(0,-1))
   }
 
   return (
@@ -67,9 +71,17 @@ const Home = () => {
       </div>
 
       {showBrowser ? (
-        <FolderBrowser onFileSelect={handleFileSelect} />
+        <FolderBrowser 
+          onFileSelect={handleFileSelect}
+          currentPath={currentPath}
+          setCurrentPath={setCurrentPath} 
+        />
       ) : (
         <>
+          <div className="flex items-center gap-2 m-4">
+            <Breadcrumbs path={currentPath} />
+          </div> 
+   
           <span className="m-4 font-bold text-blue-500">{filteredLogs.length} logs found</span>
           <div className="flex justify-between items-center pr-4">
             <FilterSearch onApply={handleFilterApply} />
