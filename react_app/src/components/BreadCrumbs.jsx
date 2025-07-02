@@ -1,7 +1,6 @@
-import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import { FiChevronRight, FiChevronLeft } from 'react-icons/fi'
 
-const Breadcrumbs = ({ path, onNavigate = () => {}, onBack = () => {} } ) => {
-  
+const Breadcrumbs = ({ path, onNavigate = () => {}, onBack = () => {} }) => {
   return (
     <nav className="flex items-center mb-4 gap-1">
       <button
@@ -11,7 +10,6 @@ const Breadcrumbs = ({ path, onNavigate = () => {}, onBack = () => {} } ) => {
         title="Go up one folder"
       >
         <FiChevronLeft />
-       
       </button>
       <span className="text-gray-700 font-semibold">Root</span>
       {path.map((folder, idx) => (
@@ -21,13 +19,12 @@ const Breadcrumbs = ({ path, onNavigate = () => {}, onBack = () => {} } ) => {
             className="text-blue-600 hover:underline"
             onClick={() => onNavigate(path.slice(0, idx + 1))}
           >
-            {folder.replace(/\/$/, "")}
+            {folder.replace(/\/$/, '')}
           </button>
         </span>
       ))}
     </nav>
-  );
+  )
 }
-
 
 export default Breadcrumbs

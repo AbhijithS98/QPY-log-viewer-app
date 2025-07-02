@@ -6,8 +6,8 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
   const [folders, setFolders] = useState([])
   const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(false)
-  
-  const prefix = currentPath.join('');
+
+  const prefix = currentPath.join('')
 
   useEffect(() => {
     setLoading(true)
@@ -21,28 +21,24 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
   }, [prefix])
 
   const handleFolderClick = (folder) => {
-    setCurrentPath([...currentPath, folder]);
+    setCurrentPath([...currentPath, folder])
   }
 
   const handleBack = () => {
     if (currentPath.length > 0) {
       const newPath = currentPath.slice(0, -1)
-      setCurrentPath(newPath);
+      setCurrentPath(newPath)
     }
   }
 
   return (
     <div className="bg-gray-200 rounded-lg shadow p-6 w-full max-w-screen-lg mx-auto">
-      <Breadcrumbs 
-        path={currentPath} 
-        onNavigate={setCurrentPath} 
-        onBack={handleBack}
-      />
-      
+      <Breadcrumbs path={currentPath} onNavigate={setCurrentPath} onBack={handleBack} />
+
       {loading ? (
         <div className="text-center text-gray-500 py-8">Loading...</div>
       ) : (
-        <>         
+        <>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div>
               <h3 className="font-semibold mb-2 flex items-center gap-1 text-gray-700">
@@ -73,7 +69,7 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
                   <li key={file}>
                     <button
                       className="flex items-center gap-2 px-2 py-1 rounded hover:bg-green-50 text-green-700 font-medium text-lg"
-                      onClick={() => onFileSelect(prefix + file, [...currentPath,file])}
+                      onClick={() => onFileSelect(prefix + file, [...currentPath, file])}
                     >
                       <FiFileText /> {file}
                     </button>
