@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import Breadcrumbs from './BreadCrumbs'
 import { FiFolder, FiFileText } from 'react-icons/fi'
+import { Link } from 'react-router-dom';
 
-const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
+const FolderBrowser = () => {
   const [folders, setFolders] = useState([])
   const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(false)
+  const [currentPath, setCurrentPath] = useState([])
 
   const prefix = currentPath.join('')
 
@@ -32,6 +34,13 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
   }
 
   return (
+    <>
+    <div className="m-4 flex justify-between items-center">
+      <h1 className="text-2xl font-semibold flex items-center gap-2">
+        <FiFolder className="inline mr-2" />
+        Browse Log Files
+      </h1>
+    </div>
     <div className="bg-gray-200 rounded-lg shadow p-6 w-full max-w-screen-lg mx-auto">
       <Breadcrumbs path={currentPath} onNavigate={setCurrentPath} onBack={handleBack} />
 
@@ -67,12 +76,12 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
               <ul>
                 {files.map((file) => (
                   <li key={file}>
-                    <button
+                    <Link
                       className="flex items-center gap-2 px-2 py-1 rounded hover:bg-green-50 text-green-700 font-medium text-lg"
-                      onClick={() => onFileSelect(prefix + file, [...currentPath, file])}
+                      to={`/logs/${encodeURIComponent(prefix + file)}`}
                     >
                       <FiFileText /> {file}
-                    </button>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -81,6 +90,7 @@ const FolderBrowser = ({ onFileSelect, currentPath = [], setCurrentPath }) => {
         </>
       )}
     </div>
+    </>
   )
 }
 

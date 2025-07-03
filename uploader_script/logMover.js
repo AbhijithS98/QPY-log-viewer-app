@@ -64,11 +64,18 @@ async function uploadDirectoryToS3(sourceDirs) {
 
         try {
           await bucketClient.send(new PutObjectCommand(putParams))
-          console.log(`Uploaded: ${s3Key}`)
-          fs.unlinkSync(filePath)
-          console.log(`Deleted local file: ${filePath}`)
+          console.log(`Uploaded: ${file}`)
+
+          // Verifying upload with HeadObjectCommand
+          try {
+            await bucketClient.send(new HeadObjectCommand({ Bucket: BUCKET_NAME, Key: s3Key }))
+            fs.unlinkSync(filePath)
+            console.log(`Verified and deleted local file: ${filePath}`)
+          } catch (verifyErr) {
+            console.error(`Uploaded but could not verify ${file}:`, verifyErr)
+          }
         } catch (err) {
-          console.error(`Failed to upload ${s3Key}:`, err)
+          console.error(`Failed to upload ${file}:`, err)
         }
       }
     }
