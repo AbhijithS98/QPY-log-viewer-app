@@ -42,7 +42,6 @@ app.get('/api/list', async (req, res) => {
 
   try {
     const data = await bucketClient.send(command)
-    console.log('response:', data)
 
     const folders = data.CommonPrefixes?.map((p) => p.Prefix.replace(fullPrefix, '')) || []
     const files =

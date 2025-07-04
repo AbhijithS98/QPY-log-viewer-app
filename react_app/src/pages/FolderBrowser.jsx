@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react'
-import Breadcrumbs from './BreadCrumbs'
+import Breadcrumbs from '../components/BreadCrumbs'
 import { FiFolder, FiFileText } from 'react-icons/fi'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const FolderBrowser = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const pathString = decodeURIComponent(location.pathname.replace(/^\/log-archives\/?/, ''))
+  const initialPath = pathString ? pathString.split('/').filter(Boolean).map(p => p + '/') : []
+  const [currentPath, setCurrentPath] = useState(initialPath)
   const [folders, setFolders] = useState([])
   const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(false)
-  const [currentPath, setCurrentPath] = useState([])
+  
 
   const prefix = currentPath.join('')
 
@@ -21,6 +26,16 @@ const FolderBrowser = () => {
         setLoading(false)
       })
   }, [prefix])
+
+  // Update URL when currentPath changes
+  useEffect(() => {
+    if (currentPath.length) {
+      navigate(`/log-archives/${encodeURIComponent(currentPath.join(''))}`)
+    } else {
+      navigate(`/log-archives`)
+    }
+    // eslint-disable-next-line
+  }, [currentPath])
 
   const handleFolderClick = (folder) => {
     setCurrentPath([...currentPath, folder])
@@ -79,6 +94,8 @@ const FolderBrowser = () => {
                     <Link
                       className="flex items-center gap-2 px-2 py-1 rounded hover:bg-green-50 text-green-700 font-medium text-lg"
                       to={`/logs/${encodeURIComponent(prefix + file)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <FiFileText /> {file}
                     </Link>
